@@ -1,0 +1,167 @@
+
+
+caption{
+    margin-bottom: 0.5em;
+}
+
+
+header img{
+    height: 40px;
+    width: 40px;
+    margin-right: 0.5em;
+    box-shadow: 0.1em 0.1em 0.04em rgb(0, 0, 0, 0.2);
+}
+header{
+    display: flex;
+    border-radius: 4px;
+    justify-content: center;
+    align-items:center;
+    height: 50px;
+    width: 100%;
+    margin-top: 2em;
+    margin-bottom: 0;
+    
+}
+header h3{
+    margin-left: 0.5em;
+}
+header a{
+    display: flex;
+    color: black;
+    align-items:center;
+    text-decoration: none;
+}
+header a h1 {
+    font-size: 1.5em;
+    transition: 500ms;
+}
+header a:hover{
+    transition: 500ms;
+    color:rgb(156, 11, 11);
+    text-shadow: 00.2em 0.2em 0.2em rgb(0, 0, 0, 0.2);
+}
+
+aside img{
+    width: 330px;
+    height: 390px;
+}
+.row{
+    margin: 0 auto;
+    display: flex;
+    flex-flow: row-reverse wrap;    
+    justify-content: center;
+    max-width: 800px;    
+}
+
+
+
+.item{
+    flex-grow: 4;
+}
+footer{
+    margin: 0 auto;
+    max-width: 750px;
+    background-color: black;
+    color: white;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 4px;
+}
+footer h2{
+    margin: 5px;
+}
+nav{
+   
+    margin-top: 0;
+    margin-bottom: 1em;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+nav a {
+    margin-left: 0.5em;
+    padding: 0.5em;
+    font-size: 0.9em;
+    text-decoration: none;
+    color: black;
+    transition: 500ms;
+}
+nav a:hover{
+    font-size: 1.3em;
+    text-shadow: 0.1em 0.1em 0.1em rgb(0, 0, 0, 0.2);
+    transition: 100ms;
+}
+header{
+    display: flex;
+    flex-direction: row;
+    
+}
+form{
+    display: flex;
+    flex-direction: column;
+}
+.form-item{
+    display: flex;
+    flex-direction: column;
+}
+input, select{
+    height: 30px;
+    border: 0;
+    box-shadow: 0.2em 0.2em 0.5em 0.05em rgb(0, 0, 0, 0.2);
+    border-radius: 0.5em;
+}
+label{
+    margin-bottom: 2em;
+    margin: auto;
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+button{
+    height: 50px;
+    width: 100%;
+    border: none;
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.5em 0.05em rgb(0, 0, 0, 0.2);
+}
+button:hover{
+    background-color:darkgray;
+}
+button:active{
+    transform: translate(1px,2px);
+}
+section{
+    padding-top: 2em;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    max-width: 330px;
+}
+section hr{
+    width: 370px;
+    margin-left: -20px;
+}
+@media (max-width: 800px) {
+    .row {
+        flex-direction:column-reverse;
+        align-content: center;
+    }
+    aside{
+        margin-top: 2em;
+        margin-bottom: 2em;
+    }
+    section{
+        height: 350px;
+    }
+    section{
+        height: 100%;
+    }
+  }
+ 
+
+
+input:hover,select:hover{
+    border: 2px solid rgb(223, 21, 21);
+    
+}
+#map { height: 180px; }

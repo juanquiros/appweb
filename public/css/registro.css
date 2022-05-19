@@ -1,0 +1,98 @@
+
+.registro-row{
+    margin: 0 auto;
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    max-width: 800px; 
+    margin-bottom: 2em;
+
+}
+
+
+.registro-row  .form-item{
+    flex-direction: row;
+    justify-content: baseline;   
+    padding-left: 1em; 
+}
+.registro-row label{
+    width: 200px;
+    margin-left: 0;
+}
+
+.registro-row input, select{
+    width: 200px;
+    min-width: 200px;
+    max-width: 200px;
+}
+.registro-row section{
+    width: 400px;
+    max-width: 400px;
+}
+#genero input{
+    width: 10px;
+    min-width:unset;
+    box-shadow: 0 0;
+}
+#genero label{
+    width: auto;
+    margin-right: 0.5em;
+}
+#genero{
+    display: flex;
+    align-content: center;
+}
+#coordenadas input{
+    width: 30%;
+    min-width: unset;
+
+}
+#coordenadas label{
+    width: 10%;
+    margin-right: 0.5em;
+}
+#coordenadas{
+    min-width: 200px;
+    max-width: 200px;
+    display: flex;
+    align-content: center;
+}
+.registro-row aside{
+    margin-left: 1em;
+}
+
+@media (max-width: 800px) {
+    .registro-row > aside{
+        background-color: white;
+        width: 500px;
+        margin-left: 0;
+    }
+    .registro-row{
+        display: flex;
+        flex-direction: column-reverse;
+    }
+}
+.registro-row > aside{
+    position: sticky;
+    top: 10px;
+    height: 500px;
+}
+#map{
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+#alert, #email_alert{
+    box-shadow: 0.2em 0.2em 0.5em 0.05em rgb(0, 0, 0, 0.2);
+    visibility: hidden;   
+    width: 100%;
+    height: auto;
+    padding: 0;
+    text-align: center;
+    
+}
+#alert, #email_alert > p {
+    margin: 0 auto;
+}
+#alert {
+    text-align: left;
+}
