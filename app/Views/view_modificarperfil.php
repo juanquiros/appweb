@@ -1,36 +1,7 @@
 
-
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-	<title>Registro - Taller de Aplicaciones Web</title>
+<?php include_once('documentoDeclaracion.php');?>    
     
-    <link rel="icon" href="img/fabicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="css/style.css">    
-    <link rel="stylesheet" type="text/css" href="css/registro.css">  
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
-    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
-    <script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script>
-    <script>
-            var base_url = '<?php echo base_url() ?>';
-            var usuario_session = <?php echo json_encode(session()->get('user'))?>;
-    </script>
-    </head>
-    <body>
-    
-    
-        <header>
-            <a href="/"><img src="img/VideoTrend.png" alt="VideoTrend">
-            <h1>VideoTrend</h1></a>
-            <h3>Mira tus videos de YouTube como quieras</h3>
-        </header>
-        <nav><a href="<?php echo site_url("/login");?>" target="_blank">Iniciar Sesión</a>|
-         <a href="" target="_blank">Olvide mi contraseña</a>|
-         <a href="" target="_blank">Acerca de Nosotros</a></nav>
+        
         <div class="row registro-row">
             <section class="item">
                 <div class="text-center">
@@ -147,13 +118,5 @@
                 </form>
             </section>
             </div>
-            <footer><h2>YouTube - U.G.D. - Campus Virtual</h2></footer>
-
             
-            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-            <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
-            <script src="js/script.js"></script>
-            <script>cargarDatosSession();</script>
-    </body>
-</html>
+<?php include_once('documentoCierre.php');?>

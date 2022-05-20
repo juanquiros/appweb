@@ -106,26 +106,6 @@
 //---------------------- Geolocalizacion
 
   var marker= null;
-  $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
-    
-   var map = L.map('map').setView([-27.3698805,-55.9399215], 17);
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-      
-      maxZoom: 18,
-      id: 'mapbox/streets-v11',
-      tileSize: 512,
-      zoomOffset: -1,
-      accessToken: 'pk.eyJ1IjoiNjRiaXRzanVhbiIsImEiOiJjbDJhcDVkdjMwN2d4M2pxbjRzaHY3NHlyIn0.JGc3z4I7Go_JgaZLc0VTkA'
-  }).addTo(map);
-  const search = new GeoSearch.GeoSearchControl({
-    provider: new GeoSearch.OpenStreetMapProvider(),
-  });
-  
-  
-  
-  
   const start = async function(consulta = null) {
     var result = null;
     const provider = new GeoSearch.OpenStreetMapProvider();
@@ -184,6 +164,28 @@
         document.getElementById('long').value = '';
       }
   }
+  if(ruta[ruta.length-1] == "modificarperfil" || ruta[ruta.length-1] == "registro"){
+   
+    
+   var map = L.map('map').setView([-27.3698805,-55.9399215], 17);
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+      
+      maxZoom: 18,
+      id: 'mapbox/streets-v11',
+      tileSize: 512,
+      zoomOffset: -1,
+      accessToken: 'pk.eyJ1IjoiNjRiaXRzanVhbiIsImEiOiJjbDJhcDVkdjMwN2d4M2pxbjRzaHY3NHlyIn0.JGc3z4I7Go_JgaZLc0VTkA'
+  }).addTo(map);
+  const search = new GeoSearch.GeoSearchControl({
+    provider: new GeoSearch.OpenStreetMapProvider(),
+  });
+  
+  
+  
+  
+  
+  
+
   function obtenerUbicacion(){
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(mostrarPosicion, mostrarErrores, opciones);    
@@ -227,7 +229,7 @@
     maximumAge: 1000
   };
   start();
-
+}
 
 //---------------------- Fin Geolocalizacion
 
@@ -348,7 +350,7 @@ function login(event){
 
 //---------------------- Actualizar Usuario
 function cargarDatosSession(){
-  if(usuario_session){
+  if(ruta[ruta.length-1] == "modificarperfil" && typeof usuario_session !== 'undefined'){
     document.getElementById('nombre').value = usuario_session.nombre;
     document.getElementById('apellido').value = usuario_session.apellido;
     document.getElementById('email').value = usuario_session.email;
@@ -430,3 +432,127 @@ function actualizarUsuario(event){
 
 }
 //---------------------- Fin Actualizar Usuario
+
+//---------------------- API Google Youtube
+
+var apiKey = 'AIzaSyB5WieILxyTpt6f3yb2wHWYHeoeGTZy8cY';
+
+gapi.load("client", loadClient);
+function loadClient() {
+  var noDisponible = '<i class="bi bi-exclamation-square"></i>Sin servicios'
+  var loading = '<div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div>';
+  var searchBtn = '<img src="';
+  if(subRuta){
+    searchBtn += "../";
+  }
+  searchBtn += 'img/VideoTrend.png" alt="VideoTrend" class="btn-search ml-0" onclick="execute()">';
+  var btn = document.getElementById('btn-search');
+  btn.innerHTML = loading ;
+    gapi.client.setApiKey(apiKey);
+    return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+        .then(function() { 
+          btn.innerHTML = searchBtn;
+          console.log("GAPI client loaded for API"); },
+                function(err) { 
+                  btn.innerHTML = noDisponible;
+                  console.error("Error loading GAPI client for API", err); });
+}
+
+
+const keywordInput = document.getElementById('terminos');
+const maxresultInput = 40;
+const orderInput = 'relevance';
+const videoList = document.getElementById('videoListContainer');
+var pageToken = '';
+  
+
+  
+function paginate(e, obj) {
+    e.preventDefault();
+    pageToken = obj.getAttribute('data-id');
+    execute();
+}
+  
+// Make sure the client is loaded before calling this method.
+function execute() {
+    const searchString = keywordInput.value;
+    const maxresult = maxresultInput.value;
+    const orderby = orderInput.value;
+    var loading = '<div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div><h2>Cargando</h2>';
+    var sinVideos= '<h2><i class="bi bi-collection-play-fill"></i> No hay resultados</h2>';
+    var alertError = '<h2><i class="bi bi-exclamation-triangle-fill"></i>';
+    videoList.innerHTML = loading;
+    var arr_search = {
+        "part": 'snippet',
+        "type": 'video',
+        "order": orderby,
+        "maxResults":40,        
+        "q": searchString
+    };
+  
+    if (pageToken != '') {
+        arr_search.pageToken = pageToken;
+    }
+  
+    return gapi.client.youtube.search.list(arr_search)
+    .then(function(response) {
+        // Handle the results here (response.result has the parsed body).
+        const listItems = response.result.items;
+        console.log(response.result);
+        if (listItems) {
+            let output = '<div class="search-row" id="listaBusqueda">';
+
+            listItems.forEach(item => {
+                const videoId = item.id.videoId;
+                const videoTitle = item.snippet.title;
+                output += `
+                
+                  <div class="card bg-light">
+                    <div class="card-header">${videoTitle.toLowerCase()}...</div>
+                    <div class="card-body">
+                      <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                  </div>
+                `;
+            });
+            output += '</div><hr>';
+  
+            if (response.result.prevPageToken) {
+                output += `<br><a class="paginate" href="#" data-id="${response.result.prevPageToken}" onclick="paginate(event, this)">Anterior</a>`;
+            }
+  
+            if (response.result.nextPageToken) {
+                output += `<h3><a href="#" class="paginate" data-id="${response.result.nextPageToken}" onclick="paginate(event, this)"><i class="bi bi-cloud-plus"></i>Cargar más resultados</a></h3>`;
+            }
+  
+            // Output list
+            videoList.innerHTML = output;
+            generarListaBusqueda();
+        }
+        
+        if(listItems.length <=0 ){
+            videoList.innerHTML = sinVideos;
+        }
+    },
+    function(err) { 
+      videoList.innerHTML = '<div class="text-center w-50">' +  alertError + '</h2><h2>' + err.result.error.message + '</h2></div>';
+      console.error("Execute error", err); 
+    });
+}
+
+
+function generarListaBusqueda(){
+  const lista = document.getElementById('listaBusqueda');
+  console.log(lista);
+  
+  Sortable.create(lista,{
+      group: 'shared', // set both lists to same group
+      animation: 150
+  });
+}
+
+const listaB = document.getElementById('listaVideos1');
+Sortable.create(listaB,{
+    group: 'shared', // set both lists to same group
+    animation: 150
+});

@@ -35,6 +35,7 @@ $routes->get('/', 'Home::index',['filter' => 'authGuard']);
 $routes->get('/modificarperfil', 'ModificarPerfil::index',['filter' => 'authGuard']);
 $routes->post('/usuario/insertar', 'Usuario::insertar');
 $routes->put('/usuario/actualizar', 'Usuario::actualizar',['filter' => 'authGuard']);
+
 $routes->get('/usuario/insertar', 'Usuario::errorM');
 
 

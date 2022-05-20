@@ -7,8 +7,7 @@ class Localidad extends BaseController
 {
     use ResponseTrait;
     public function getLocalidad($id_localidad)
-    {
-        
+    {       
         $model= new LocalityModel;
         $data = array();
         $locality = $model->find($id_localidad);

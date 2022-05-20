@@ -43,11 +43,6 @@ class Session extends BaseController
         return $this->response->setStatusCode( $data['code'])->setJSON($data);
     }
 
-    public function logout(){
-        $session = session();
-        if(isset($session) && !empty($session)){
-            $session->destroy();
-        }
-    }
+   
 
 }

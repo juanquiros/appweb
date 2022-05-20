@@ -9,7 +9,7 @@ class Registro extends BaseController
       //  
       $model= new CountryModel;
       $data['countries']  = $model->findAll();
-      
+      $data['title'] = "Registro";
       return view('view_registro', $data);
     }
     public function email_available(){

@@ -1,0 +1,86 @@
+.scroll{
+    overflow-y: scroll !important;
+    overflow-x: scroll !important;
+    height: 300px !important;
+    width: 100%;
+}
+
+.inp-home{
+    width: 100%;
+}
+.search{
+    display: inline-block;
+    margin-bottom: 0;
+}
+.principal{
+    margin: 0 auto;
+    justify-content: center;
+    width: 100%;
+    max-width: 1100px;
+
+}
+.btn-search{
+    width: 30px;
+    height: 30px;
+}
+
+iframe{
+    width: 240px;
+}
+
+.card{
+    width: 250px;
+}
+
+
+#videoListContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.search-row{
+    min-width: 1000px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 999px) {
+    #videoListContainer{
+        justify-content: left;
+        margin-left: 1em;
+        margin-left: 20em;
+    }
+    #videoListContainer > h3 > a {
+        margin-left: -17em;
+    }
+    .lbl-home{
+        margin-bottom: 0;
+    }
+  }
+.card-body{
+    padding: 5px !important;
+}
+#videoListContainer > .search-row > .card > .card-header{
+    overflow: hidden;
+    max-height: 49px;
+    text-overflow: ellipsis;
+    white-space: pre;
+}
+@media (max-width: 728px) {
+    header{
+        height: 100px;
+    }
+    
+}
+
+#listaVideos1{
+    min-height: 200px;
+    background-color: blue !important;
+    border: 2px solid black;
+}
+
+
