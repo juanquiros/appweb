@@ -45,14 +45,18 @@
 
         </form>
     </div>
-    <div class="col-lg-auto  w-100">
+    <div class="col-lg-auto w-100">
         <div class="w-100 scroll-card p-2 mb-2">
+            <div id="status"></div>
             <div class="card-body scroll" data-spy="scroll"  data-offset="0">
+                
                 <div id="videoListContainer" >
-
+                    <div class="search-row" id="listaBusqueda">
+                    </div><hr>
                 </div>
                 
             </div>
+            <div id="cargarmas"></div>
         </div>
         <div class="w-100 scroll-card p-2 mb-2">
             
@@ -71,7 +75,29 @@
 
                             <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
                                 data-parent="#accordionExample" >
-                                <div id="listaVideos1">
+                                <div class="search-row listaVideos" id="listaVideos1">
+
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="accordion" id="accordionExample2">
+                        <div class="collapse-card" >
+                            <div class="card-header" id="heading2">
+                                <h2 class="mb-0">
+                                    <button class="btn btn-link btn-block text-left" type="button"
+                                        data-toggle="collapse" data-target="#collapse2" aria-expanded="true"
+                                        aria-controls="collapse2">
+                                        Collapsible Group Item #1
+                                    </button>
+                                </h2>
+                            </div>
+
+                            <div id="collapse2" class="collapse show" aria-labelledby="headingOne"
+                                data-parent="#accordionExample" >
+                                <div class="search-row listaVideos" id="listaVideos2">
 
                                 </div>
                                 
@@ -80,6 +106,7 @@
                         
                     </div>
                 </div>
+                
         </div>
     </div>
 

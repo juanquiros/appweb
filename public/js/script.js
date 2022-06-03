@@ -462,7 +462,9 @@ function loadClient() {
 const keywordInput = document.getElementById('terminos');
 const maxresultInput = 40;
 const orderInput = 'relevance';
-const videoList = document.getElementById('videoListContainer');
+const videoList = document.getElementById('listaBusqueda');
+const videoListstatus = document.getElementById('status');
+const videoListmas = document.getElementById('cargarmas');
 var pageToken = '';
   
 
@@ -473,7 +475,7 @@ function paginate(e, obj) {
     execute();
 }
   
-// Make sure the client is loaded before calling this method.
+
 function execute() {
     const searchString = keywordInput.value;
     const maxresult = maxresultInput.value;
@@ -481,7 +483,7 @@ function execute() {
     var loading = '<div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div><h2>Cargando</h2>';
     var sinVideos= '<h2><i class="bi bi-collection-play-fill"></i> No hay resultados</h2>';
     var alertError = '<h2><i class="bi bi-exclamation-triangle-fill"></i>';
-    videoList.innerHTML = loading;
+    videoListstatus.innerHTML =  loading;
     var arr_search = {
         "part": 'snippet',
         "type": 'video',
@@ -492,67 +494,77 @@ function execute() {
   
     if (pageToken != '') {
         arr_search.pageToken = pageToken;
+    }else{
+      videoList.innerHTML = "";
     }
   
     return gapi.client.youtube.search.list(arr_search)
     .then(function(response) {
-        // Handle the results here (response.result has the parsed body).
+        // cargar resultados
         const listItems = response.result.items;
         console.log(response.result);
         if (listItems) {
-            let output = '<div class="search-row" id="listaBusqueda">';
-
+            
+          videoListstatus.innerHTML = "";
             listItems.forEach(item => {
                 const videoId = item.id.videoId;
                 const videoTitle = item.snippet.title;
-                output += `
                 
-                  <div class="card bg-light">
-                    <div class="card-header">${videoTitle.toLowerCase()}...</div>
-                    <div class="card-body">
-                      <iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    </div>
-                  </div>
-                `;
+                var newDiv = document.createElement("div");
+                newDiv.className = "card bg-light"
+                
+                newDiv.innerHTML = '<div class="card-header"><i class="bi bi-arrows-move"></i>' + videoTitle.toLowerCase() + '...</div><div class="card-body"><iframe src="https://www.youtube.com/embed/'+ videoId +'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+
+                // cargar tarjeta 
+                var currentDiv = document.getElementById("div1");
+                videoList.insertBefore(newDiv, currentDiv);
+
+                
             });
-            output += '</div><hr>';
-  
+            
+            /*
             if (response.result.prevPageToken) {
                 output += `<br><a class="paginate" href="#" data-id="${response.result.prevPageToken}" onclick="paginate(event, this)">Anterior</a>`;
+            } */
+  
+            if (response.result.nextPageToken) { //boton cargar mas
+              videoListmas.innerHTML = `<h5><a href="#" class="paginate" data-id="${response.result.nextPageToken}" onclick="paginate(event, this)"><i class="bi bi-cloud-plus"></i> Cargar más resultados</a></h5>`;
             }
   
-            if (response.result.nextPageToken) {
-                output += `<h3><a href="#" class="paginate" data-id="${response.result.nextPageToken}" onclick="paginate(event, this)"><i class="bi bi-cloud-plus"></i>Cargar más resultados</a></h3>`;
-            }
-  
-            // Output list
-            videoList.innerHTML = output;
+            
             generarListaBusqueda();
         }
         
         if(listItems.length <=0 ){
-            videoList.innerHTML = sinVideos;
+          videoListstatus.innerHTML = sinVideos;
         }
     },
     function(err) { 
-      videoList.innerHTML = '<div class="text-center w-50">' +  alertError + '</h2><h2>' + err.result.error.message + '</h2></div>';
+      videoListstatus.innerHTML =  '<div class="text-center w-50">' +  alertError + '</h2><h2>' + err.result.error.message + '</h2></div>';
       console.error("Execute error", err); 
     });
 }
+//---------------- fin api google
 
-
+//---------------- drag and drop
 function generarListaBusqueda(){
   const lista = document.getElementById('listaBusqueda');
   console.log(lista);
   
   Sortable.create(lista,{
-      group: 'shared', // set both lists to same group
+      group: 'shared', 
       animation: 150
   });
 }
 
 const listaB = document.getElementById('listaVideos1');
 Sortable.create(listaB,{
-    group: 'shared', // set both lists to same group
+    group: 'shared', 
     animation: 150
 });
+
+//---------------- fin drag and drop
+
+
+//---------------- Listados de busqueda
+//---------------- Fin Listados de busqueda

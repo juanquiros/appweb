@@ -40,7 +40,7 @@ iframe{
     width: 100%;
 }
 .search-row{
-    min-width: 1000px;
+    min-width: 1004px;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -64,7 +64,7 @@ iframe{
 .card-body{
     padding: 5px !important;
 }
-#videoListContainer > .search-row > .card > .card-header{
+ .search-row > .card > .card-header{
     overflow: hidden;
     max-height: 49px;
     text-overflow: ellipsis;
@@ -77,10 +77,18 @@ iframe{
     
 }
 
-#listaVideos1{
-    min-height: 200px;
-    background-color: blue !important;
-    border: 2px solid black;
+.listaVideos{
+    min-height: 100px;
+    background-color: gainsboro;
+    margin-bottom: 0.5em;
+
 }
 
+.accordion{
+    min-width: 1000px;
+}
 
+.scroll-card{
+    border-radius: 0.5em;
+    box-shadow: 0.2em 0.2em 0.5em 0.05em rgb(0, 0, 0, 0.2);
+}
