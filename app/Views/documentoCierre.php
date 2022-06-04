@@ -5,6 +5,7 @@
             <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.0.0/jquery.min.js"></script>
             <!-- jsDelivr :: Sortable :: Latest (https://www.jsdelivr.com/package/npm/sortablejs) -->
             <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+            <script src="<?php if(isset($sub) && $sub) echo '../'?>js/apiKey.js"></script> 
             <script src="<?php if(isset($sub) && $sub) echo '../'?>js/script.js"></script>            
             <script>cargarDatosSession();</script>
     </body>

@@ -430,14 +430,10 @@ function actualizarUsuario(event){
        
     });
 
-}
-//---------------------- Fin Actualizar Usuario
-
+}//---------------------- Fin Actualizar Usuario
 //---------------------- API Google Youtube
-
-var apiKey = '';
-
 gapi.load("client", loadClient);
+
 function loadClient() {
   var noDisponible = '<i class="bi bi-exclamation-square"></i>Sin servicios'
   var loading = '<div class="spinner-border text-danger" role="status"><span class="sr-only">Loading...</span></div>';
