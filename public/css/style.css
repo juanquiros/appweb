@@ -165,3 +165,6 @@ input:hover,select:hover{
     
 }
 #map { height: 180px; }
+.search-row > .card > .card-header{
+    cursor: move !important;
+}

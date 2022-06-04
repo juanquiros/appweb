@@ -44,6 +44,8 @@
             </div>
 
         </form>
+        <div class="alert alert-danger" role="alert" id="alert">                        
+        </div>
     </div>
     <div class="col-lg-auto w-100">
         <div class="w-100 scroll-card p-2 mb-2">
@@ -61,50 +63,10 @@
         <div class="w-100 scroll-card p-2 mb-2">
             
                 <div class="card-body scroll" data-spy="scroll" data-target="#navbar-example2" data-offset="0">
-                    <div class="accordion" id="accordionExample">
-                        <div class="collapse-card" >
-                            <div class="card-header" id="headingOne">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button"
-                                        data-toggle="collapse" data-target="#collapseOne" aria-expanded="true"
-                                        aria-controls="collapseOne">
-                                        Collapsible Group Item #1
-                                    </button>
-                                </h2>
-                            </div>
-
-                            <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                                data-parent="#accordionExample" >
-                                <div class="search-row listaVideos" id="listaVideos1">
-
-                                </div>
-                                
-                            </div>
-                        </div>
+                    <div class="accordion" id="accordionListas">
                         
                     </div>
-                    <div class="accordion" id="accordionExample2">
-                        <div class="collapse-card" >
-                            <div class="card-header" id="heading2">
-                                <h2 class="mb-0">
-                                    <button class="btn btn-link btn-block text-left" type="button"
-                                        data-toggle="collapse" data-target="#collapse2" aria-expanded="true"
-                                        aria-controls="collapse2">
-                                        Collapsible Group Item #1
-                                    </button>
-                                </h2>
-                            </div>
-
-                            <div id="collapse2" class="collapse show" aria-labelledby="headingOne"
-                                data-parent="#accordionExample" >
-                                <div class="search-row listaVideos" id="listaVideos2">
-
-                                </div>
-                                
-                            </div>
-                        </div>
-                        
-                    </div>
+                   
                 </div>
                 
         </div>

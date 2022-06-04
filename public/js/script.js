@@ -435,7 +435,7 @@ function actualizarUsuario(event){
 
 //---------------------- API Google Youtube
 
-var apiKey = 'AIzaSyB5WieILxyTpt6f3yb2wHWYHeoeGTZy8cY';
+var apiKey = '';
 
 gapi.load("client", loadClient);
 function loadClient() {
@@ -452,10 +452,10 @@ function loadClient() {
     return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
         .then(function() { 
           btn.innerHTML = searchBtn;
-          console.log("GAPI client loaded for API"); },
+          console.log("Se cargó el cliente de google API con éxito"); },
                 function(err) { 
                   btn.innerHTML = noDisponible;
-                  console.error("Error loading GAPI client for API", err); });
+                  console.error("Error  GAPI", err); });
 }
 
 
@@ -465,6 +465,7 @@ const orderInput = 'relevance';
 const videoList = document.getElementById('listaBusqueda');
 const videoListstatus = document.getElementById('status');
 const videoListmas = document.getElementById('cargarmas');
+const videoListTitulo = document.getElementById('titulo');
 var pageToken = '';
   
 
@@ -496,30 +497,19 @@ function execute() {
         arr_search.pageToken = pageToken;
     }else{
       videoList.innerHTML = "";
+      registrarBusqueda();
+      getBusquedas();
     }
   
     return gapi.client.youtube.search.list(arr_search)
     .then(function(response) {
         // cargar resultados
         const listItems = response.result.items;
-        console.log(response.result);
         if (listItems) {
-            
+          
           videoListstatus.innerHTML = "";
             listItems.forEach(item => {
-                const videoId = item.id.videoId;
-                const videoTitle = item.snippet.title;
-                
-                var newDiv = document.createElement("div");
-                newDiv.className = "card bg-light"
-                
-                newDiv.innerHTML = '<div class="card-header"><i class="bi bi-arrows-move"></i>' + videoTitle.toLowerCase() + '...</div><div class="card-body"><iframe src="https://www.youtube.com/embed/'+ videoId +'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
-
-                // cargar tarjeta 
-                var currentDiv = document.getElementById("div1");
-                videoList.insertBefore(newDiv, currentDiv);
-
-                
+                            crearTarjetaVideo(item.id.videoId,item.snippet.title,videoList);
             });
             
             /*
@@ -532,7 +522,7 @@ function execute() {
             }
   
             
-            generarListaBusqueda();
+            
         }
         
         if(listItems.length <=0 ){
@@ -544,27 +534,191 @@ function execute() {
       console.error("Execute error", err); 
     });
 }
+
+function crearTarjetaVideo(videoId,videoTitle,lista,id=""){
+  var newDiv = document.createElement("div");
+  newDiv.className = "card bg-light";
+  newDiv.id = videoId;
+  newDiv.title = videoTitle;
+  if(id!=""){
+    newDiv.setAttribute("data-id",id);
+  }
+  newDiv.innerHTML = '<div class="card-header" ><i class="bi bi-arrows-move"></i> ' + videoTitle.toLowerCase() + '...</div><div class="card-body"><iframe src="https://www.youtube.com/embed/'+ videoId +'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+  // cargar tarjeta 
+  lista.appendChild(newDiv);
+}
 //---------------- fin api google
 
 //---------------- drag and drop
-function generarListaBusqueda(){
-  const lista = document.getElementById('listaBusqueda');
-  console.log(lista);
-  
+
+  const lista = document.getElementById('listaBusqueda');  
   Sortable.create(lista,{
       group: 'shared', 
-      animation: 150
+      animation: 150,
+      dragClass:"drag"
+      
   });
-}
 
-const listaB = document.getElementById('listaVideos1');
-Sortable.create(listaB,{
-    group: 'shared', 
-    animation: 150
-});
+
+
 
 //---------------- fin drag and drop
 
+// --------------- Registrar busqueda
+function registrarBusqueda(){
+  
+  var busqueda = {
+    "titulo": document.getElementById('titulo').value ,
+    "terminos_busqueda":  document.getElementById('terminos').value,
+    "id_usuario": usuario_session.id
+  }
+  var error = document.getElementById('alert');
+  error.textContent ="";
+  $.ajax({
+    url: base_url + '/busqueda/insertar',
+    method: "POST",
+    data: {"busqueda": JSON.stringify(busqueda)}
+  })
+    .done(function( msg ) {
+      error.style.visibility = "hidden";
+      busqueda.id = msg.id_busqueda;
+      getBusquedas();
+    }).fail(function(err){                
+      error.style.visibility = "visible";
+      var errores = JSON.stringify(err.responseJSON.errors).replace(/"/g,'').replace(/{/g,'').replace(/}/g,'').split(',');
+      errores.forEach(element => {
+        var tag = document.createElement("p");
+        var text = document.createTextNode(element);
+        tag.appendChild(text);
+        error.appendChild(tag);
+      });
+       
+    });
 
+}
+function getBusquedas(){  
+  var listadebusquedas = document.getElementById("accordionListas");  
+      $.ajax({
+        url: base_url + '/busqueda/get',
+        method: "GET"
+      })
+        .done(function( msg ) {
+          var busquedas = msg.busquedas;
+          listadebusquedas.innerHTML = "";
+          for (let i = busquedas.length -1 ; 0 <= i ; i--) { 
+            
+            if(i == busquedas.length -1){
+              nuevoAcordionBusqueda(busquedas[i], "show" );
+            }else{
+              nuevoAcordionBusqueda(busquedas[i]);
+            }
+            getVideos(busquedas[i].id);
+          }
+        
+        }).fail(function(err){
+          console.log(err.statusText);
+        });  
+}
+
+if(ruta[ruta.length-1] == ""){
+  getBusquedas();
+}
+// --------------- Fin registrar busqueda
 //---------------- Listados de busqueda
+function nuevoAcordionBusqueda(busqueda, show =""){
+  if(busqueda){
+    var idBusqueda = busqueda.id;
+    var titulo = busqueda.titulo;
+    var newDiv = document.createElement("div");
+    var listadebusquedas = document.getElementById("accordionListas");
+    newDiv.className = "accordion";
+    newDiv.id = "accordion" + idBusqueda;
+    
+    newDiv.innerHTML = '<div class="collapse-card" ><div class="card-header" id="heading'+idBusqueda+'"><h2 class="mb-0"><button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse'+idBusqueda+'" aria-expanded="true" aria-controls="collapse'+idBusqueda+'">' + titulo  +'</button></h2></div><div id="collapse'+idBusqueda+'" class="collapse '+show+'" aria-labelledby="heading'+idBusqueda+'" data-parent="#accordion'+idBusqueda+'" ><div class="search-row listaVideos" id="search'+ idBusqueda +'"></div></div></div>';
+
+    // cargar tarjeta 
+    
+    listadebusquedas.appendChild(newDiv);
+    const lista = document.getElementById("search" + idBusqueda);
+      Sortable.create(lista,{
+          group: 'shared', 
+          animation: 150,
+          onAdd:(evt)=>{
+           registrarVideo(idBusqueda, evt.item);
+          },
+          onRemove:(evt)=>{
+            borrarVideo(idBusqueda, evt.item.dataset.id);
+          }
+      });
+  }
+                  
+}
+
 //---------------- Fin Listados de busqueda
+
+// --------------- Registrar video
+
+function registrarVideo(id_busqueda,videoItem){
+  
+  var video = {
+    "id_busqueda": id_busqueda ,
+    "id_video":  videoItem.id,
+    "titulo": videoItem.title
+  }
+  var error = document.getElementById('alert');
+  error.textContent ="";
+  $.ajax({
+    url: base_url + '/video/insertar',
+    method: "POST",
+    data: {"video": JSON.stringify(video)}
+  })
+    .done(function( msg ) {
+      error.style.visibility = "hidden";    
+      videoItem.setAttribute("data-id",msg.id);
+    }).fail(function(err){                
+      error.style.visibility = "visible";
+      var errores = JSON.stringify(err.responseJSON.errors).replace(/"/g,'').replace(/{/g,'').replace(/}/g,'').split(',');
+      errores.forEach(element => {
+        var tag = document.createElement("p");
+        var text = document.createTextNode(element);
+        tag.appendChild(text);
+        error.appendChild(tag);
+      });
+       
+    });
+
+}
+
+
+function getVideos(id_busqueda){  
+  var lista = document.getElementById("search"+id_busqueda);  
+      $.ajax({
+        url: base_url + '/video/'+id_busqueda,
+        method: "GET"
+      })
+        .done(function( msg ) {
+          var videos = msg.videos;
+          lista.innerHTML = "";
+          for (let i = 0; i < videos.length ;i++) { 
+            crearTarjetaVideo(videos[i].id_video,videos[i].titulo,lista,videos[i].id);
+          }        
+        }).fail(function(err){
+          console.log(err.statusText);
+        });  
+}
+
+function borrarVideo(id_busqueda,id_video){  
+  var video = {
+    "id_busqueda": id_busqueda ,
+    "id_video":  id_video
+  }
+  $.ajax({
+    url: base_url + '/video/borrar/'+id_busqueda+'/'+id_video,
+    method: "DELETE",
+    data: {"video": JSON.stringify(video)}
+  })
+    .done(function( msg ) {
+    }).fail(function(err){
+      console.log(err.statusText);
+    });  
+}

@@ -35,9 +35,12 @@ $routes->get('/', 'Home::index',['filter' => 'authGuard']);
 $routes->get('/modificarperfil', 'ModificarPerfil::index',['filter' => 'authGuard']);
 $routes->post('/usuario/insertar', 'Usuario::insertar');
 $routes->put('/usuario/actualizar', 'Usuario::actualizar',['filter' => 'authGuard']);
-
 $routes->get('/usuario/insertar', 'Usuario::errorM');
-
+$routes->post('/busqueda/insertar', 'Busquedas::insertar',['filter' => 'authGuard']);
+$routes->get('/busqueda/get', 'Busquedas::getBusquedas',['filter' => 'authGuard']);
+$routes->post('/video/insertar', 'Videos::insertar',['filter' => 'authGuard']);
+$routes->delete('/video/borrar/(:num)/(:any)', 'Videos::borrar/$1/$2',['filter' => 'authGuard']);
+$routes->get('/video/(:num)', 'Videos::getVideos/$1',['filter' => 'authGuard']);
 
 /*
  * --------------------------------------------------------------------
