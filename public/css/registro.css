@@ -96,3 +96,6 @@
 #alert {
     text-align: left;
 }
+.inp-home{
+    min-width: 100%;
+}

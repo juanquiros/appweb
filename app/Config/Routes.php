@@ -40,7 +40,7 @@ $routes->post('/busqueda/insertar', 'Busquedas::insertar',['filter' => 'authGuar
 $routes->get('/busqueda/get', 'Busquedas::getBusquedas',['filter' => 'authGuard']);
 $routes->post('/video/insertar', 'Videos::insertar',['filter' => 'authGuard']);
 $routes->delete('/video/borrar/(:num)/(:any)', 'Videos::borrar/$1/$2',['filter' => 'authGuard']);
-$routes->get('/video/(:num)', 'Videos::getVideos/$1',['filter' => 'authGuard']);
+$routes->get('/video/(:any)', 'Videos::getVideos/$1',['filter' => 'authGuard']);
 
 /*
  * --------------------------------------------------------------------

@@ -29,7 +29,7 @@ class Busquedas extends BaseController
         $session = session();
         $model= new SearchModel;
         $data = array();
-        $busqueda = $model->where("id_usuario",$session->get('user')->id)->findAll();
+        $busqueda = $model->where("id_usuario",$session->get('user')->id)->orderBy("created_at","asc")->findAll();
         $code = 404;
         if(isset($busqueda) && !empty($busqueda)){
             $data+= ['busquedas' => $busqueda];

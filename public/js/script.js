@@ -20,11 +20,9 @@
     }
 
     function getProvinces(event, provinceName = "", localityName ="",calleName=''){
-      
       if(event){
         event.preventDefault();//detener formulario  
-      }
-      
+      }      
       var id_country = document.getElementById('pais').value;    
       var combo = document.getElementById("provincia");
       this.clearProvinces();
@@ -112,13 +110,10 @@
     var search = document.getElementById('calle').value;
     if(document.getElementById('altura').value){
       search += ' ' + document.getElementById('altura').value;
-    }
-    
+    }    
     search += ', ' + document.getElementById('ciudad').options[document.getElementById('ciudad').selectedIndex].text;
     search += ', ' + document.getElementById('provincia').options[document.getElementById('provincia').selectedIndex].text; 
-    search += ', ' + document.getElementById('pais').options[document.getElementById('pais').selectedIndex].text; 
-    
-      
+    search += ', ' + document.getElementById('pais').options[document.getElementById('pais').selectedIndex].text;       
       if(consulta){
          result = await provider.search({ query: consulta });
       }else{
@@ -164,12 +159,9 @@
         document.getElementById('long').value = '';
       }
   }
-  if(ruta[ruta.length-1] == "modificarperfil" || ruta[ruta.length-1] == "registro"){
-   
-    
+  if(ruta[ruta.length-1] == "modificarperfil" || ruta[ruta.length-1] == "registro"){   
    var map = L.map('map').setView([-27.3698805,-55.9399215], 17);
-    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
-      
+    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {     
       maxZoom: 18,
       id: 'mapbox/streets-v11',
       tileSize: 512,
@@ -178,14 +170,7 @@
   }).addTo(map);
   const search = new GeoSearch.GeoSearchControl({
     provider: new GeoSearch.OpenStreetMapProvider(),
-  });
-  
-  
-  
-  
-  
-  
-
+  }); 
   function obtenerUbicacion(){
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(mostrarPosicion, mostrarErrores, opciones);    
@@ -203,8 +188,7 @@
     if(this.marker){
       this.marker.remove();
     }
-    start(latitud + ' ' + longitud);
-  
+    start(latitud + ' ' + longitud);  
   }
   
   function mostrarErrores(error) {
@@ -323,7 +307,6 @@ function registrar(event){
 
 
 //---------------------- Login
-
 function login(event){
   event.preventDefault();//detener formulario
   var password = document.getElementById('password').value;
@@ -408,7 +391,7 @@ function actualizarUsuario(event){
     UserUpdate.pass_confirm = pass_confirm;
   }
   console.log(UserUpdate);
-  //enviar peticion
+  //enviar
   $.ajax({
     url: base_url + '/usuario/actualizar',
     method: "PUT",
@@ -432,7 +415,7 @@ function actualizarUsuario(event){
 
 }//---------------------- Fin Actualizar Usuario
 //---------------------- API Google Youtube
-gapi.load("client", loadClient);
+gapi.load("client", loadClient); //iniciar cliente api, configurar key en js/apiKey.js
 
 function loadClient() {
   var noDisponible = '<i class="bi bi-exclamation-square"></i>Sin servicios'
@@ -454,14 +437,15 @@ function loadClient() {
                   console.error("Error  GAPI", err); });
 }
 
-
 const keywordInput = document.getElementById('terminos');
 const maxresultInput = 40;
-const orderInput = 'relevance';
+const orderInput = document.getElementById('orderListaBusqueda');
+const orderGuardado = document.getElementById('orderGuardado');
 const videoList = document.getElementById('listaBusqueda');
 const videoListstatus = document.getElementById('status');
 const videoListmas = document.getElementById('cargarmas');
 const videoListTitulo = document.getElementById('titulo');
+const ordenar = document.getElementById('order');
 var pageToken = '';
   
 
@@ -472,7 +456,14 @@ function paginate(e, obj) {
     execute();
 }
   
-
+function ordenarListaBusqueda(){
+  console.log(ordenar.selectedIndex);
+}
+function buscarKeyPress(e){
+  if (e.keyCode === 13) {
+    execute();
+  }
+}
 function execute() {
     const searchString = keywordInput.value;
     const maxresult = maxresultInput.value;
@@ -500,27 +491,18 @@ function execute() {
     return gapi.client.youtube.search.list(arr_search)
     .then(function(response) {
         // cargar resultados
-        const listItems = response.result.items;
+        var listItems = response.result.items;
         if (listItems) {
-          
+          console.log(Date.parse(listItems[0].snippet.publishedAt));
           videoListstatus.innerHTML = "";
+          console.log(listItems);
             listItems.forEach(item => {
                             crearTarjetaVideo(item.id.videoId,item.snippet.title,videoList);
             });
-            
-            /*
-            if (response.result.prevPageToken) {
-                output += `<br><a class="paginate" href="#" data-id="${response.result.prevPageToken}" onclick="paginate(event, this)">Anterior</a>`;
-            } */
-  
             if (response.result.nextPageToken) { //boton cargar mas
               videoListmas.innerHTML = `<h5><a href="#" class="paginate" data-id="${response.result.nextPageToken}" onclick="paginate(event, this)"><i class="bi bi-cloud-plus"></i> Cargar más resultados</a></h5>`;
             }
-  
-            
-            
-        }
-        
+        }        
         if(listItems.length <=0 ){
           videoListstatus.innerHTML = sinVideos;
         }
@@ -531,7 +513,9 @@ function execute() {
     });
 }
 
-function crearTarjetaVideo(videoId,videoTitle,lista,id=""){
+
+
+function crearTarjetaVideo(videoId,videoTitle,lista,id="",id_busqueda = 0){
   var newDiv = document.createElement("div");
   newDiv.className = "card bg-light";
   newDiv.id = videoId;
@@ -539,8 +523,13 @@ function crearTarjetaVideo(videoId,videoTitle,lista,id=""){
   if(id!=""){
     newDiv.setAttribute("data-id",id);
   }
-  newDiv.innerHTML = '<div class="card-header" ><i class="bi bi-arrows-move"></i> ' + videoTitle.toLowerCase() + '...</div><div class="card-body"><iframe src="https://www.youtube.com/embed/'+ videoId +'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
-  // cargar tarjeta 
+  var html_ = '<div class="card-header" >';
+  if(id_busqueda!=0){
+    html_ += '<a onclick="eliminarVideoPermanentemente('+id+',\''+videoTitle+'\','+id_busqueda+')"><i class="bi bi-trash"></i> </a>';
+  }  
+  html_ += '<i class="bi bi-arrows-move"></i> ' + videoTitle.toLowerCase() + '...</div><div class="card-body"><iframe src="https://www.youtube.com/embed/'+ videoId +'" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+   newDiv.innerHTML = html_;
+   // cargar tarjeta 
   lista.appendChild(newDiv);
 }
 //---------------- fin api google
@@ -609,18 +598,26 @@ function getBusquedas(){
               nuevoAcordionBusqueda(busquedas[i]);
             }
             getVideos(busquedas[i].id);
+            $("#btnBusqueda"+busquedas[i].id).mousedown(function(e){
+              //1: izquierda, 2: medio/ruleta, 3: derecho
+                 if(e.which == 3) 
+                   {
+                       console.log("Clic busqueda id "+busquedas[i].id);
+                       keywordInput.value = busquedas[i].terminos_busqueda;
+                       execute();
+                   }
+             });
           }
         
         }).fail(function(err){
           console.log(err.statusText);
         });  
 }
-
-if(ruta[ruta.length-1] == ""){
-  getBusquedas();
-}
 // --------------- Fin registrar busqueda
 //---------------- Listados de busqueda
+if(ruta[ruta.length-1] == ""){
+  getBusquedas();//cargar las busquedas si estamos en el home
+}
 function nuevoAcordionBusqueda(busqueda, show =""){
   if(busqueda){
     var idBusqueda = busqueda.id;
@@ -628,12 +625,9 @@ function nuevoAcordionBusqueda(busqueda, show =""){
     var newDiv = document.createElement("div");
     var listadebusquedas = document.getElementById("accordionListas");
     newDiv.className = "accordion";
-    newDiv.id = "accordion" + idBusqueda;
-    
-    newDiv.innerHTML = '<div class="collapse-card" ><div class="card-header" id="heading'+idBusqueda+'"><h2 class="mb-0"><button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse'+idBusqueda+'" aria-expanded="true" aria-controls="collapse'+idBusqueda+'">' + titulo  +'</button></h2></div><div id="collapse'+idBusqueda+'" class="collapse '+show+'" aria-labelledby="heading'+idBusqueda+'" data-parent="#accordion'+idBusqueda+'" ><div class="search-row listaVideos" id="search'+ idBusqueda +'"></div></div></div>';
-
-    // cargar tarjeta 
-    
+    newDiv.id = "accordion" + idBusqueda;    
+    newDiv.innerHTML = '<div class="collapse-card" ><div class="card-header" id="heading'+idBusqueda+'" ><h2 class="mb-0"><button id="btnBusqueda'+idBusqueda+'" class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse'+idBusqueda+'" aria-expanded="true" aria-controls="collapse'+idBusqueda+'" >' + titulo  +'</button></h2></div><div id="collapse'+idBusqueda+'" class="collapse '+show+'" aria-labelledby="heading'+idBusqueda+'" data-parent="#accordion'+idBusqueda+'" ><div class="search-row listaVideos" id="search'+ idBusqueda +'"></div></div></div>';
+    // cargar tarjeta     
     listadebusquedas.appendChild(newDiv);
     const lista = document.getElementById("search" + idBusqueda);
       Sortable.create(lista,{
@@ -654,8 +648,7 @@ function nuevoAcordionBusqueda(busqueda, show =""){
 
 // --------------- Registrar video
 
-function registrarVideo(id_busqueda,videoItem){
-  
+function registrarVideo(id_busqueda,videoItem){  
   var video = {
     "id_busqueda": id_busqueda ,
     "id_video":  videoItem.id,
@@ -671,6 +664,12 @@ function registrarVideo(id_busqueda,videoItem){
     .done(function( msg ) {
       error.style.visibility = "hidden";    
       videoItem.setAttribute("data-id",msg.id);
+      var html_ = videoItem.children[0].innerHTML;
+      console.log(videoItem);
+      if(html_.includes('bi-trash')){
+      }else{
+        videoItem.children[0].innerHTML = '<a onclick="eliminarVideoPermanentemente('+msg.id+',\''+videoItem.title+'\','+id_busqueda+')"><i class="bi bi-trash"></i> </a>' + html_;
+      }
     }).fail(function(err){                
       error.style.visibility = "visible";
       var errores = JSON.stringify(err.responseJSON.errors).replace(/"/g,'').replace(/{/g,'').replace(/}/g,'').split(',');
@@ -685,18 +684,20 @@ function registrarVideo(id_busqueda,videoItem){
 
 }
 
-
+function ordenarListaGuardada(){
+  getBusquedas();
+}
 function getVideos(id_busqueda){  
   var lista = document.getElementById("search"+id_busqueda);  
       $.ajax({
-        url: base_url + '/video/'+id_busqueda,
+        url: base_url + '/video/'+id_busqueda + '/' + orderGuardado.selectedIndex,
         method: "GET"
       })
         .done(function( msg ) {
           var videos = msg.videos;
           lista.innerHTML = "";
           for (let i = 0; i < videos.length ;i++) { 
-            crearTarjetaVideo(videos[i].id_video,videos[i].titulo,lista,videos[i].id);
+            crearTarjetaVideo(videos[i].id_video,videos[i].titulo,lista,videos[i].id,id_busqueda);
           }        
         }).fail(function(err){
           console.log(err.statusText);
@@ -717,4 +718,13 @@ function borrarVideo(id_busqueda,id_video){
     }).fail(function(err){
       console.log(err.statusText);
     });  
+}
+document.oncontextmenu = function(){return false} //desactivar menu clic derecho
+
+function eliminarVideoPermanentemente(id,titulo,id_busqueda){
+  var opcion = confirm("¿Borrar este video? " + titulo);
+    if (opcion == true) {
+      borrarVideo(id_busqueda,id);
+      getBusquedas();
+	  }  
 }

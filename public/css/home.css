@@ -39,6 +39,18 @@ iframe{
     align-items: center;
     width: 100%;
 }
+.orden-mis-videos{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    
+}
+.orden-mis-videos select{
+    min-width: 50%;
+}
+.orden-mis-videos  label{
+    margin-right: 1em;
+}
 .search-row{
     min-width: 1004px;
     display: flex;
@@ -91,4 +103,7 @@ iframe{
 .scroll-card{
     border-radius: 0.5em;
     box-shadow: 0.2em 0.2em 0.5em 0.05em rgb(0, 0, 0, 0.2);
+}
+.bi-trash{
+    color: red;
 }

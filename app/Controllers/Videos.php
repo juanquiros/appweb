@@ -5,11 +5,27 @@ use App\Models\SearchModel;
 use App\Models\VideoModel;
 class Videos extends BaseController
 {
-    public function getVideos($id_busqueda)
+    public function getVideos($id_busqueda,$orden = -1)
     {        
         $model= new VideoModel;
         $data = array();
-        $videos = $model->where("id_busqueda",$id_busqueda)->findAll();
+        switch($orden){
+            case 0:
+                $videos = $model->where("id_busqueda",$id_busqueda)->orderBy("created_at","asc")->findAll();
+                break;
+            case 1:
+                $videos = $model->where("id_busqueda",$id_busqueda)->orderBy("created_at","desc")->findAll();
+                break;
+            case 2:
+                $videos = $model->where("id_busqueda",$id_busqueda)->orderBy("titulo","asc")->findAll();
+                break;
+            case 3:
+                $videos = $model->where("id_busqueda",$id_busqueda)->orderBy("titulo","desc")->findAll();
+                break;
+            default:
+                $videos = $model->where("id_busqueda",$id_busqueda)->findAll();
+        }
+        
         $code = 404;
         if(isset($videos) && !empty($videos)){
             $data+= ['videos' => $videos];
@@ -55,15 +71,15 @@ class Videos extends BaseController
                         'code' => 200]);
                 }
             }else{
-                return $this->response->setStatusCode( 200)->setJSON([
+                return $this->response->setStatusCode( 400)->setJSON([
                     'status' => 'error',
                     'message' => 'No se borro el video',
                     'code' => 400]);
             }
         }else{
-            return $this->response->setStatusCode( 200)->setJSON([
+            return $this->response->setStatusCode( 400)->setJSON([
                 'status' => 'error',
-                'message' => 'No se borro el video',
+                'message' => 'No se borro el video, usr',
                 'code' => 400]);
         }
         
